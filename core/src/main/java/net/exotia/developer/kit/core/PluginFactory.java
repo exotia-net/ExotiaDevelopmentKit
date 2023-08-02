@@ -6,6 +6,9 @@ import net.exotia.developer.kit.core.commands.CommandsFactory;
 import net.exotia.developer.kit.core.configuration.ConfigEntity;
 import net.exotia.developer.kit.core.configuration.ConfigurationFactory;
 import net.exotia.developer.kit.core.configuration.sections.LiteCommandsSection;
+import net.exotia.developer.kit.core.exceptions.InjectorIsNotCreated;
+import net.exotia.developer.kit.injector.Injector;
+import net.exotia.developer.kit.injector.InjectorSource;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -34,15 +37,31 @@ public class PluginFactory {
         return new PluginFactory(plugin);
     }
 
-    public PluginFactory listener(Listener... listeners) {
+    public PluginFactory useInjector() {
+        Injector injector = InjectorSource.create();
+        injector.registerInjectable(injector);
+        this.exotiaPlugin.setInjector(injector);
+        return this;
+    }
+    public PluginFactory injectable(Object... objects) {
+        if (this.exotiaPlugin.getInjector() == null) throw new InjectorIsNotCreated();
+        for (Object object : objects) {
+            this.exotiaPlugin.getInjector().registerInjectable(object);
+        }
+        return this;
+    }
+
+    public PluginFactory listeners(Listener... listeners) {
         this.listeners.addAll(Arrays.asList(listeners));
         return this;
     }
 
     public <T extends OkaeriConfig> PluginFactory configFile(Class<T> configClass, String fileName) {
-        this.exotiaPlugin.getConfigs().add(
-                new ConfigEntity(fileName, configClass, this.configurationFactory.produce(configClass, fileName))
-        );
+        ConfigEntity config = new ConfigEntity(fileName, configClass, this.configurationFactory.produce(configClass, fileName));
+        this.exotiaPlugin.getConfigs().add(config);
+        if (this.exotiaPlugin.getInjector() != null) {
+            this.exotiaPlugin.getInjector().registerInjectable("config/"+fileName, config.getConfig());
+        }
         return this;
     }
 
@@ -53,8 +72,8 @@ public class PluginFactory {
     }
 
     public ExotiaPlugin bootstrap() {
-        this.liteCommandsBuilder.register();
         this.listeners.forEach(listener -> this.server.getPluginManager().registerEvents(listener, this.plugin));
+        this.liteCommandsBuilder.register();
         return this.exotiaPlugin;
     }
 }
