@@ -9,8 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>net.exotia.developer.kit.utils</groupId>
-    <artifactId>utils</artifactId>
+    <groupId>net.exotia.developer.kit.core</groupId>
+    <artifactId>core</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -24,11 +24,14 @@
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>okaeri-repo</id>
+            <url>https://storehouse.okaeri.eu/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>panda-repository</id>
+            <url>https://repo.panda-lang.org/releases</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -37,32 +40,24 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.oraxen</groupId>
-            <artifactId>oraxen</artifactId>
-            <version>1.156.3</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>gs.mclo</groupId>
-                    <artifactId>mclogs</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.ticxo</groupId>
-                    <artifactId>PlayerAnimator</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>me.gabytm.util</groupId>
-                    <artifactId>actions-spigot</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.kyori</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.jeff_media</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>eu.okaeri</groupId>
+            <artifactId>okaeri-configs-yaml-bukkit</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.okaeri</groupId>
+            <artifactId>okaeri-configs-serdes-bukkit</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.rollczi.litecommands</groupId>
+            <artifactId>bukkit-adventure</artifactId>
+            <version>2.8.8</version>
+        </dependency>
+        <dependency>
+            <groupId>net.exotia.developer.kit.utils</groupId>
+            <artifactId>utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

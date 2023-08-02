@@ -1,6 +1,7 @@
 package net.exotia.developer.kit.utils.items;
 
-import net.exotia.developer.kit.utils.MessageUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -8,17 +9,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class ExotiaItemBuilder {
-    private List<String> lore = new ArrayList<>();
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private Component displayName;
+    private List<Component> lore = new ArrayList<>();
     private HashMap<Enchantment, Integer> enchantments = new HashMap<>();
     private final Material material;
     private boolean hideAttributes;
     private int amount;
-    private String displayName;
     private String oraxenId = null;
 
     public ExotiaItemBuilder(Material material, int amount) {
@@ -30,23 +31,33 @@ public class ExotiaItemBuilder {
         this(material, 1);
     }
 
-    public ExotiaItemBuilder title(String title) {
-        this.displayName = MessageUtil.implementColors(title);
+    public ExotiaItemBuilder name(String name) {
+        this.displayName = this.miniMessage.deserialize(name);
         return this;
     }
+    public ExotiaItemBuilder name(Component name) {
+        this.displayName = name;
+        return this;
+    }
+
     public ExotiaItemBuilder lore(String lore) {
-        this.lore.add(MessageUtil.implementColors(lore));
+        this.lore.add(this.miniMessage.deserialize(lore));
         return this;
     }
-    public ExotiaItemBuilder lore(List<String> loreLines) {
-        this.lore.addAll(loreLines.stream().map(MessageUtil::implementColors).toList());
+    public ExotiaItemBuilder loreString(List<String> loreLines) {
+        this.lore(loreLines.stream().map(this.miniMessage::deserialize).toList());
         return this;
     }
-    public ExotiaItemBuilder lore(String[] loreLines) {
-        this.lore.addAll(Arrays.stream(loreLines).map(MessageUtil::implementColors).toList());
+    public ExotiaItemBuilder lore(Component lore) {
+        this.lore.add(lore);
         return this;
     }
-    public ExotiaItemBuilder setLoreForce(List<String> lore) {
+    public ExotiaItemBuilder lore(List<Component> loreLines) {
+        this.lore.addAll(loreLines);
+        return this;
+    }
+
+    public ExotiaItemBuilder setLoreForce(List<Component> lore) {
         this.lore = lore;
         return this;
     }
@@ -83,10 +94,10 @@ public class ExotiaItemBuilder {
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         if (this.displayName != null && itemMeta != null) {
-            itemMeta.setDisplayName(this.displayName);
+            itemMeta.displayName(this.displayName);
         }
         if (itemMeta != null && !this.lore.isEmpty()) {
-            itemMeta.setLore(this.lore);
+            itemMeta.lore(this.lore);
         }
         if (itemMeta != null && this.hideAttributes) {
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

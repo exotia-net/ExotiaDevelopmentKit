@@ -21,8 +21,8 @@ public class ExotiaItem {
         if (meta == null) return item;
         ItemMeta itemStackMeta = this.itemStack.getItemMeta();
         if (itemStackMeta != null) {
-            meta.setDisplayName(itemStackMeta.getDisplayName());
-            meta.setLore(itemStackMeta.getLore());
+            meta.displayName(itemStackMeta.displayName());
+            meta.lore(itemStackMeta.lore());
         }
         item.setItemMeta(meta);
         return item;
