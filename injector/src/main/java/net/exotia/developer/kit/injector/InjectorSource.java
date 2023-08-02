@@ -9,7 +9,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InjectorSource implements Injector {
