@@ -1,0 +1,4 @@
+name: ExotiaDevelopmentKit
+version: '${project.version}'
+main: net.exotia.developer.kit.spigotplugin.SpigotPlugin
+api-version: '1.19'

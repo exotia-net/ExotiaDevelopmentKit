@@ -9,27 +9,21 @@ import net.exotia.developer.kit.core.configuration.sections.LiteCommandsSection;
 import net.exotia.developer.kit.core.exceptions.InjectorIsNotCreated;
 import net.exotia.developer.kit.injector.Injector;
 import net.exotia.developer.kit.injector.InjectorSource;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class PluginFactory {
-    private final Server server;
     private final Plugin plugin;
-    private LiteCommandsBuilder<CommandSender> liteCommandsBuilder;
-    private final List<Listener> listeners = new ArrayList<>();
     private final ConfigurationFactory configurationFactory;
-    private final ExotiaPlugin exotiaPlugin = new ExotiaPlugin();
+    private final ExotiaPlugin exotiaPlugin;
 
     public PluginFactory(Plugin plugin) {
         this.plugin = plugin;
-        this.server = plugin.getServer();
+        this.exotiaPlugin = new ExotiaPlugin(plugin);
         this.configurationFactory = new ConfigurationFactory(plugin.getDataFolder());
     }
 
@@ -52,28 +46,28 @@ public class PluginFactory {
     }
 
     public PluginFactory listeners(Listener... listeners) {
-        this.listeners.addAll(Arrays.asList(listeners));
+        this.exotiaPlugin.getListeners().addAll(Arrays.asList(listeners));
         return this;
     }
 
-    public <T extends OkaeriConfig> PluginFactory configFile(Class<T> configClass, String fileName) {
-        ConfigEntity config = new ConfigEntity(fileName, configClass, this.configurationFactory.produce(configClass, fileName));
-        this.exotiaPlugin.getConfigs().add(config);
+    public <T extends OkaeriConfig> PluginFactory configFile(Class<T> configClass, String fileName, Consumer<T> config) {
+        T product = this.configurationFactory.produce(configClass, fileName);
+        ConfigEntity configEntity = new ConfigEntity(fileName, configClass, product);
+        this.exotiaPlugin.getConfigs().add(configEntity);
         if (this.exotiaPlugin.getInjector() != null) {
-            this.exotiaPlugin.getInjector().registerInjectable("config/"+fileName, config.getConfig());
+            this.exotiaPlugin.getInjector().registerInjectable("config/"+fileName, product);
         }
+        config.accept(product);
         return this;
     }
 
     public PluginFactory liteCommands(LiteCommandsSection messages, Consumer<LiteCommandsBuilder<CommandSender>> consumer) {
-        this.liteCommandsBuilder = CommandsFactory.create(this.plugin, messages);
-        consumer.accept(this.liteCommandsBuilder);
+        this.exotiaPlugin.setLiteCommandsBuilder(CommandsFactory.create(this.plugin, messages));
+        consumer.accept(this.exotiaPlugin.getLiteCommandsBuilder());
         return this;
     }
 
-    public ExotiaPlugin bootstrap() {
-        this.listeners.forEach(listener -> this.server.getPluginManager().registerEvents(listener, this.plugin));
-        this.liteCommandsBuilder.register();
+    public ExotiaPlugin produce() {
         return this.exotiaPlugin;
     }
 }
