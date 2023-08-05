@@ -1,11 +1,12 @@
 package net.exotia.developer.kit.utils.items;
 
+import eu.okaeri.configs.OkaeriConfig;
 import io.th0rgal.oraxen.api.OraxenItems;
 import net.exotia.developer.kit.utils.PluginUtil;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ExotiaItem {
+public class ExotiaItem extends OkaeriConfig {
     private final String oraxenId;
     private final ItemStack itemStack;
 

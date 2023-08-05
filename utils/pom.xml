@@ -28,6 +28,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>okaeri-repo</id>
+            <url>https://storehouse.okaeri.eu/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -36,6 +40,11 @@
             <artifactId>paper-api</artifactId>
             <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.okaeri</groupId>
+            <artifactId>okaeri-configs-yaml-bukkit</artifactId>
+            <version>3.3.6</version>
         </dependency>
         <dependency>
             <groupId>com.github.oraxen</groupId>
