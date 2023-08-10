@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.exotia.developer.kit</groupId>
         <artifactId>ExotiaDevelopmentKit</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.9</version>
     </parent>
 
     <groupId>net.exotia.developer.kit.core</groupId>
@@ -63,6 +63,11 @@
         </dependency>
         <dependency>
             <groupId>eu.okaeri</groupId>
+            <artifactId>okaeri-configs-yaml-bukkit</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.okaeri</groupId>
             <artifactId>okaeri-configs-serdes-bukkit</artifactId>
             <version>3.2.0</version>
         </dependency>
@@ -80,12 +85,18 @@
         <dependency>
             <groupId>net.exotia.developer.kit.utils</groupId>
             <artifactId>utils</artifactId>
-            <version>1.0</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>net.exotia.developer.kit.injector</groupId>
             <artifactId>injector</artifactId>
-            <version>1.0</version>
+            <version>1.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>net.exotia.developer.kit</groupId>
+            <artifactId>database</artifactId>
+            <version>1.0.9</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

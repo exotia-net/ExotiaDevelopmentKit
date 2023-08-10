@@ -1,18 +1,25 @@
 package net.exotia.developer.kit.core;
 
+import com.zaxxer.hikari.HikariDataSource;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import eu.okaeri.configs.OkaeriConfig;
+import net.exotia.developer.kit.DatabaseService;
+import net.exotia.developer.kit.DatabaseType;
+import net.exotia.developer.kit.Scheduler;
 import net.exotia.developer.kit.core.commands.CommandsFactory;
 import net.exotia.developer.kit.core.configuration.ConfigEntity;
 import net.exotia.developer.kit.core.configuration.ConfigurationFactory;
+import net.exotia.developer.kit.core.configuration.sections.DatabaseSection;
 import net.exotia.developer.kit.core.configuration.sections.LiteCommandsSection;
 import net.exotia.developer.kit.core.exceptions.InjectorIsNotCreated;
+import net.exotia.developer.kit.core.scheduler.SchedulerBukkit;
 import net.exotia.developer.kit.injector.Injector;
 import net.exotia.developer.kit.injector.InjectorSource;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -64,6 +71,23 @@ public class PluginFactory {
     public PluginFactory liteCommands(LiteCommandsSection messages, Consumer<LiteCommandsBuilder<CommandSender>> consumer) {
         this.exotiaPlugin.setLiteCommandsBuilder(CommandsFactory.create(this.plugin, messages));
         consumer.accept(this.exotiaPlugin.getLiteCommandsBuilder());
+        return this;
+    }
+    public PluginFactory useScheduler(boolean registerAsInjectable) {
+        Scheduler scheduler = new SchedulerBukkit(this.plugin);
+        if (registerAsInjectable && this.exotiaPlugin.getInjector() != null) this.injectable(scheduler);
+        this.exotiaPlugin.setScheduler(scheduler);
+        return this;
+    }
+    public PluginFactory useDatabase(DatabaseSection databaseSection, Consumer<HikariDataSource> dataSource) {
+        DatabaseService databaseService = new DatabaseService(databaseSection, this.plugin.getDataFolder());
+        dataSource.accept(databaseService.getDataSource());
+        this.exotiaPlugin.setDatabaseService(databaseService);
+        try {
+            databaseService.connect();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 

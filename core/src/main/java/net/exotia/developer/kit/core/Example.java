@@ -11,6 +11,7 @@ public class Example {
                 .listeners()
                 .configFile(PluginConfiguration.class, "configuration.yml", pluginConfiguration -> this.pluginConfiguration = pluginConfiguration)
                 .liteCommands(null, builder -> {})
+                .useDatabase(null, hikariDataSource -> {})
                 .produce();
 
         exotiaPlugin.bootstrap();

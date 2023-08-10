@@ -3,7 +3,7 @@
   <parent>
     <artifactId>ExotiaDevelopmentKit</artifactId>
     <groupId>net.exotia.developer.kit</groupId>
-    <version>1.0.5</version>
+    <version>1.0.9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.exotia.developer.kit.spigotplugin</groupId>

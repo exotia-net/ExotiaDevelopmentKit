@@ -16,7 +16,8 @@ public class ExotiaItem extends OkaeriConfig {
     }
 
     public ItemStack getItem() {
-        if (!PluginUtil.isEnabled("Oraxen") && !OraxenItems.exists(this.oraxenId)) return this.itemStack;
+        if (!PluginUtil.isEnabled("Oraxen")) return this.itemStack;
+        if (this.oraxenId == null || !OraxenItems.exists(this.oraxenId)) return this.itemStack;
         ItemStack item = OraxenItems.getItemById(this.oraxenId).build();
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
