@@ -7,6 +7,8 @@ import eu.okaeri.configs.OkaeriConfig;
 import net.exotia.developer.kit.DatabaseService;
 import net.exotia.developer.kit.DatabaseType;
 import net.exotia.developer.kit.Scheduler;
+import net.exotia.developer.kit.core.actions.Action;
+import net.exotia.developer.kit.core.actions.ActionService;
 import net.exotia.developer.kit.core.commands.CommandsFactory;
 import net.exotia.developer.kit.core.configuration.ConfigEntity;
 import net.exotia.developer.kit.core.configuration.ConfigurationFactory;
@@ -102,6 +104,23 @@ public class PluginFactory {
         return this;
     }
 
+    public PluginFactory useActions() {
+        this.exotiaPlugin.setActionService(new ActionService());
+        return this;
+    }
+    public PluginFactory actions(Action... actions) {
+        for (Action action : actions) {
+            this.exotiaPlugin.getActionService().register(action);
+        }
+        return this;
+    }
+    public PluginFactory actions(Class<? extends Action>... actions) {
+        for (Class<? extends Action> actionClass : actions) {
+            Action action = this.exotiaPlugin.getInjector().createInstance(actionClass);
+            this.actions(action);
+        }
+        return this;
+    }
     public ExotiaPlugin produce() {
         return this.exotiaPlugin;
     }

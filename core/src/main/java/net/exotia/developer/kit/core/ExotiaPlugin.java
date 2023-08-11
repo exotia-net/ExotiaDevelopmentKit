@@ -3,6 +3,7 @@ package net.exotia.developer.kit.core;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import net.exotia.developer.kit.DatabaseService;
 import net.exotia.developer.kit.Scheduler;
+import net.exotia.developer.kit.core.actions.ActionService;
 import net.exotia.developer.kit.core.configuration.ConfigEntity;
 import net.exotia.developer.kit.core.exceptions.InjectorIsNotCreated;
 import net.exotia.developer.kit.injector.Injector;
@@ -19,6 +20,7 @@ public class ExotiaPlugin {
     private final Plugin plugin;
     private DatabaseService databaseService;
     private Scheduler scheduler;
+    private ActionService actionService;
     private LiteCommandsBuilder<CommandSender> liteCommandsBuilder;
     private final List<Listener> listeners = new ArrayList<>();
     private final List<ConfigEntity> configs = new ArrayList<>();
@@ -73,5 +75,13 @@ public class ExotiaPlugin {
     public void bootstrap() {
         this.listeners.forEach(listener -> this.plugin.getServer().getPluginManager().registerEvents(listener, this.plugin));
         this.liteCommandsBuilder.register();
+    }
+
+    public ActionService getActionService() {
+        return actionService;
+    }
+
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
     }
 }
