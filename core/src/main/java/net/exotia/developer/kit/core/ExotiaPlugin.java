@@ -66,6 +66,9 @@ public class ExotiaPlugin {
     public Scheduler getScheduler() {
         return this.scheduler;
     }
+    public DatabaseService getDatabaseService() {
+        return this.databaseService;
+    }
 
     public void bootstrap() {
         this.listeners.forEach(listener -> this.plugin.getServer().getPluginManager().registerEvents(listener, this.plugin));

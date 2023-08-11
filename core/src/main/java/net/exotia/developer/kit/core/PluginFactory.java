@@ -1,5 +1,6 @@
 package net.exotia.developer.kit.core;
 
+import com.j256.ormlite.table.TableUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import eu.okaeri.configs.OkaeriConfig;
@@ -15,6 +16,7 @@ import net.exotia.developer.kit.core.exceptions.InjectorIsNotCreated;
 import net.exotia.developer.kit.core.scheduler.SchedulerBukkit;
 import net.exotia.developer.kit.injector.Injector;
 import net.exotia.developer.kit.injector.InjectorSource;
+import net.exotia.developer.kit.repositories.AbstractRepository;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -77,6 +79,15 @@ public class PluginFactory {
         Scheduler scheduler = new SchedulerBukkit(this.plugin);
         if (registerAsInjectable && this.exotiaPlugin.getInjector() != null) this.injectable(scheduler);
         this.exotiaPlugin.setScheduler(scheduler);
+        return this;
+    }
+    public PluginFactory repository(Class<?> dao, AbstractRepository abstractRepository) {
+        try {
+            TableUtils.createTableIfNotExists(this.exotiaPlugin.getDatabaseService().getConnectionSource(), dao);
+            this.exotiaPlugin.getInjector().registerInjectable(abstractRepository);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
         return this;
     }
     public PluginFactory useDatabase(DatabaseSection databaseSection, Consumer<HikariDataSource> dataSource) {

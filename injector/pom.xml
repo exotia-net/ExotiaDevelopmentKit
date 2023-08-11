@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.exotia.developer.kit</groupId>
         <artifactId>ExotiaDevelopmentKit</artifactId>
-        <version>1.0.9</version>
+        <version>1.1.0</version>
     </parent>
 
     <groupId>net.exotia.developer.kit.injector</groupId>
